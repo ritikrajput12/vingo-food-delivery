@@ -12,6 +12,7 @@ function ForgotPassword() {
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const navigate = useNavigate()
+    const [err,setErr]= useState("")
 
     const handleSendOtp = async () => {
         try {
