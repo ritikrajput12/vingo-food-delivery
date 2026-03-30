@@ -27,7 +27,7 @@ function SignIn() {
       console.log(result)
       setErr("")
     } catch (error) {
-      setErr(error.response.data.message)
+      setErr(error?.response?.data?.message)
     }
   }
 
@@ -91,7 +91,7 @@ function SignIn() {
           onClick={handleSignIn}>
           Sign In
         </button>
-        <p className='text-red-500 text-center my-[10px]'>*{err}</p>
+        {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
 
         <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200 border-gray-400 hover:bg-gray-100'>
           <FcGoogle size={20} />

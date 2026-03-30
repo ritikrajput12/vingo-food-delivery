@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
-import { serverUrl} from '../App'
+import { serverUrl } from '../App'
 
 
 function ForgotPassword() {
@@ -12,7 +12,7 @@ function ForgotPassword() {
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const navigate = useNavigate()
-    const [err,setErr]= useState("")
+    const [err, setErr] = useState("")
 
     const handleSendOtp = async () => {
         try {
@@ -20,9 +20,10 @@ function ForgotPassword() {
                 { withCredentials: true }
             )
             console.log(result)
+            setErr("")
             setStep(2)
         } catch (error) {
-            console.log(error)
+            setErr(error?.response?.data?.message)
         }
     }
 
@@ -33,16 +34,17 @@ function ForgotPassword() {
                 { withCredentials: true }
             )
             console.log(result)
+            setErr("")
             setStep(3)
         } catch (error) {
-            console.log(error)
+            setErr(error?.response?.data?.message)
         }
     }
 
     const handleResetOtp = async () => {
         if (newPassword !== confirmPassword) {
             alert("Passwords do not match");
-            return 
+            return
         }
         try {
             const result = await axios.post(`${serverUrl}/api/auth/reset-password`,
@@ -50,9 +52,10 @@ function ForgotPassword() {
                 { withCredentials: true }
             )
             console.log(result)
+            setErr("")
             navigate("/signin")
         } catch (error) {
-            console.log(error)
+            setErr(error?.response?.data?.message)
         }
     }
 
@@ -85,10 +88,11 @@ function ForgotPassword() {
                             />
                         </div>
                         <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
-                        onClick={handleSendOtp}
+                            onClick={handleSendOtp}
                         >
                             Send Otp
                         </button>
+                        {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
                     </div>}
 
                 {step === 2
@@ -108,10 +112,11 @@ function ForgotPassword() {
                             />
                         </div>
                         <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
-                        onClick={handleVerifyOtp}
+                            onClick={handleVerifyOtp}
                         >
                             Verify
                         </button>
+                        {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
                     </div>}
 
                 {step === 3
@@ -145,10 +150,11 @@ function ForgotPassword() {
                             />
                         </div>
                         <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
-                        onClick={handleResetOtp}
+                            onClick={handleResetOtp}
                         >
                             Reset Password
                         </button>
+                        {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
                     </div>}
             </div>
         </div>
