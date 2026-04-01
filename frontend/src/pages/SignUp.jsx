@@ -8,6 +8,7 @@ import axios from "axios"
 import { serverUrl } from "../App"
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from "../../firebase.js";
+import { ClipLoader } from "react-spinners"
 
 
 function SignUp() {
@@ -23,8 +24,10 @@ function SignUp() {
   const [password, setPassword] = useState("")
   const [mobile, setMobile] = useState("")
   const [err, setErr] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleSignUp = async () => {
+    setLoading(true)
     try {
       if (!mobile) {
         return setErr("mobile no is required")
@@ -34,8 +37,10 @@ function SignUp() {
       }, { withCredentials: true })
       console.log(result)
       setErr("")
+      setLoading(false)
     } catch (error) {
       setErr(error?.response?.data?.message)
+      setLoading(false)
     }
   }
 
@@ -165,8 +170,10 @@ function SignUp() {
           </div>
         </div>
         <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
-          onClick={handleSignUp}>
-          Sign Up
+          onClick={handleSignUp}
+          disabled={loading}
+        >
+          {loading ? <ClipLoader size={20} color='white' /> : "Sign Up"}
         </button>
         {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
 

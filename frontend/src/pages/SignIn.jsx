@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
 import { serverUrl } from "../App"
+import { ClipLoader } from 'react-spinners';
 
 
 function SignIn() {
@@ -18,16 +19,20 @@ function SignIn() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [err, setErr] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleSignIn = async () => {
+    setLoading(true)
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signin`, {
         email, password
       }, { withCredentials: true })
       console.log(result)
       setErr("")
+      setLoading(flase)
     } catch (error) {
       setErr(error?.response?.data?.message)
+      setLoading(false)
     }
   }
 
@@ -88,8 +93,10 @@ function SignIn() {
         </div>
 
         <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
-          onClick={handleSignIn}>
-          Sign In
+          onClick={handleSignIn}
+          disabled={loading}
+        >
+          {loading ? <ClipLoader size={20} color='white' /> : "Sign In"}
         </button>
         {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
 
