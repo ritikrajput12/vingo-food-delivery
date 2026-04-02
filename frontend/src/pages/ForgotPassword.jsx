@@ -27,7 +27,7 @@ function ForgotPassword() {
             setStep(2)
             setLoading(false)
         } catch (error) {
-            setErr(error?.response?.data?.message)
+           setErr(error?.response?.data?.message)
             setLoading(false)
         }
     }
