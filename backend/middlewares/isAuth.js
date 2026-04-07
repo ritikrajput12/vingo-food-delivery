@@ -14,8 +14,6 @@ const isAuth = async (req, res, next) => {
             return res.status(400).json({ message: "token not verify" })
         }
 
-        console.log(decodeToken)
-
         req.userId = decodeToken.userId
 
         next()
