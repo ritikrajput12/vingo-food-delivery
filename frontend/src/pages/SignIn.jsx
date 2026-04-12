@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"
 import { serverUrl } from "../App"
 import { ClipLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase"; // ya jahan defined hai
 
 
 function SignIn() {
@@ -21,13 +25,15 @@ function SignIn() {
   const [err, setErr] = useState("")
   const [loading, setLoading] = useState(false)
 
+
+  const dispatch = useDispatch()
   const handleSignIn = async () => {
     setLoading(true)
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signin`, {
         email, password
       }, { withCredentials: true })
-      console.log(result)
+      dispatch(setUserData(result.data))
       setErr("")
       setLoading(flase)
     } catch (error) {
@@ -35,6 +41,19 @@ function SignIn() {
       setLoading(false)
     }
   }
+
+  const handleGoogleAuth = async () => {
+    const provider = new GoogleAuthProvider()
+    const result = await signInWithPopup(auth, provider)
+    try {
+        const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+            email: result.user.email,
+        }, {withCredentials: true})
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
   return (
     <div className='min-h-screen w-full flex items-center justify-center p-4' style={{
