@@ -10,7 +10,7 @@ import { ClipLoader } from 'react-spinners';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../firebase"; // ya jahan defined hai
+import { auth } from "../firebase";
 
 
 function SignIn() {
@@ -35,7 +35,7 @@ function SignIn() {
       }, { withCredentials: true })
       dispatch(setUserData(result.data))
       setErr("")
-      setLoading(flase)
+      setLoading(false)
     } catch (error) {
       setErr(error?.response?.data?.message)
       setLoading(false)
@@ -46,14 +46,14 @@ function SignIn() {
     const provider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, provider)
     try {
-        const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`, {
-            email: result.user.email,
-        }, {withCredentials: true})
-        console.log(data)
+      const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+        email: result.user.email,
+      }, { withCredentials: true })
+      console.log(data)
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
+  }
 
   return (
     <div className='min-h-screen w-full flex items-center justify-center p-4' style={{
@@ -119,7 +119,9 @@ function SignIn() {
         </button>
         {err && <p className='text-red-500 text-center my-[10px]'>{err}</p>}
 
-        <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200 border-gray-400 hover:bg-gray-100'>
+        <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200 border-gray-400 hover:bg-gray-100'
+          onClick={handleGoogleAuth}
+        >
           <FcGoogle size={20} />
           <span>Sign In with Google</span>
         </button>
