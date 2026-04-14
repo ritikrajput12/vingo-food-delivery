@@ -49,7 +49,7 @@ function SignIn() {
       const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
         email: result.user.email,
       }, { withCredentials: true })
-      console.log(data)
+      dispatch(setUserData(data))
     } catch (error) {
       console.log(error)
     }
